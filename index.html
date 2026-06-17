@@ -231,6 +231,19 @@ header.nav{
 .cta-band h2{margin:0 auto;max-width:18ch}
 .cta-band p{color:var(--muted);margin:16px auto 32px;max-width:46ch}
 .cta-band .sub{font-size:.9rem;color:var(--muted-2);margin-top:18px}
+.kf-divider{margin:30px auto 0;max-width:520px;display:flex;align-items:center;gap:14px;color:var(--muted-2);font-size:.85rem}
+.kf-divider::before,.kf-divider::after{content:"";flex:1;height:1px;background:var(--line)}
+.kontakt-form{max-width:520px;margin:18px auto 0;display:grid;gap:12px;text-align:left}
+.kontakt-form .kf-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.kontakt-form input,.kontakt-form textarea{width:100%;padding:13px 15px;border:1px solid var(--line);
+  border-radius:10px;background:var(--surface);color:var(--text);font-family:'Inter',sans-serif;font-size:1rem}
+.kontakt-form input::placeholder,.kontakt-form textarea::placeholder{color:var(--muted-2)}
+.kontakt-form input:focus,.kontakt-form textarea:focus{outline:none;border-color:var(--teal);
+  box-shadow:0 0 0 3px rgba(169,119,43,.18)}
+.kontakt-form textarea{min-height:120px;resize:vertical}
+.kontakt-form button{justify-self:center;margin-top:4px}
+.kontakt-form .form-hint{font-size:.8rem;color:var(--muted-2);text-align:center;line-height:1.5}
+@media(max-width:560px){.kontakt-form .kf-row{grid-template-columns:1fr}}
 
 /* ---------- FOOTER ---------- */
 footer{border-top:1px solid var(--line);padding:54px 0 40px;background:var(--navy-2)}
@@ -451,9 +464,36 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px;background:var(--nav
       <p>Im Analysegespräch schauen wir, wo dir Zeit verloren geht und ob sich eine KI-Lösung für dich lohnt. Ehrlich — auch wenn die Antwort „noch nicht" ist.</p>
       <a href="mailto:info@ki-mueller.de?subject=Analysegespräch%20KI-Automatisierung" class="btn">Analysegespräch anfragen</a>
       <div class="sub">Oder direkt anrufen: <strong>0151 27279108</strong></div>
+
+      <div class="kf-divider">oder schreib mir direkt</div>
+      <form class="kontakt-form" id="kontaktForm" novalidate>
+        <div class="kf-row">
+          <input type="text" id="kfName" name="name" placeholder="Name" autocomplete="name">
+          <input type="email" id="kfMail" name="email" placeholder="E-Mail (optional)" autocomplete="email">
+        </div>
+        <textarea id="kfMsg" name="nachricht" placeholder="Worum geht es? Beschreib kurz deinen Bedarf."></textarea>
+        <button type="submit" class="btn">Nachricht senden</button>
+        <div class="form-hint">Beim Absenden öffnet sich dein E-Mail-Programm mit einer vorausgefüllten Nachricht an info@ki-mueller.de.</div>
+      </form>
     </div>
   </div>
 </section>
+
+<script>
+(function(){
+  var f=document.getElementById('kontaktForm');
+  if(!f)return;
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var n=document.getElementById('kfName').value.trim();
+    var m=document.getElementById('kfMail').value.trim();
+    var t=document.getElementById('kfMsg').value.trim();
+    var subj='Anfrage über ki-mueller.de'+(n?(' von '+n):'');
+    var body=(n?('Name: '+n+'\n'):'')+(m?('E-Mail: '+m+'\n'):'')+'\n'+t;
+    window.location.href='mailto:info@ki-mueller.de?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(body);
+  });
+})();
+</script>
 
 <!-- FOOTER -->
 <footer>
