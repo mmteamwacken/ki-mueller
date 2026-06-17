@@ -428,5 +428,40 @@ document.querySelectorAll('.reveal').forEach((el,i)=>{
 });
 const _t=document.querySelector('.nav-toggle');const _n=document.querySelector('header.nav');if(_t){_t.addEventListener('click',()=>_n.classList.toggle('open'));_n.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>_n.classList.remove('open')));}
 </script>
+
+<!-- n8n Chat-Widget -->
+<link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet">
+<style>
+:root{
+  --chat--color-primary:#a9772b;
+  --chat--color-primary-shade-50:#96691f;
+  --chat--color-primary-shade-100:#835b1b;
+  --chat--color-secondary:#bb5f37;
+  --chat--toggle--background:#a9772b;
+  --chat--toggle--hover--background:#96691f;
+  --chat--header--background:#2c2417;
+  --chat--message--user--background:#a9772b;
+}
+</style>
+<script type="module">
+  import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+  createChat({
+    webhookUrl: 'https://mmteam2025.app.n8n.cloud/webhook/cb5bb668-0f0d-42ab-bba5-b2f27bab8fe0/chat',
+    initialMessages: [
+      'Hallo! Ich bin der KI-Assistent von ki-mueller.',
+      'Frag mich, was eine KI-Automatisierung für deinen Betrieb bringen kann – oder probier einfach aus, wie sich so ein Agent anfühlt.'
+    ],
+    i18n: {
+      en: {
+        title: 'ki-mueller – KI-Assistent',
+        subtitle: 'Stell deine Frage. Antwort in Sekunden.',
+        getStarted: 'Neue Unterhaltung',
+        inputPlaceholder: 'Frag mich etwas …',
+        footer: '',
+        closeButtonTooltip: 'Schließen'
+      }
+    }
+  });
+</script>
 </body>
 </html>

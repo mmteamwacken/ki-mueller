@@ -191,6 +191,7 @@ header.nav{
 .portrait .pmono{font-family:'Exo 2';font-weight:800;font-size:4.6rem;
   background:linear-gradient(135deg,var(--teal),var(--blue));
   -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.portrait-img{width:100%;height:100%;object-fit:cover;object-position:50% 22%;display:block}
 .person h2{max-width:none}
 .person .intro{margin-top:18px}
 .person .sig{font-family:'Exo 2';font-weight:600;color:var(--teal);margin-top:22px;font-size:1.1rem}
@@ -392,9 +393,7 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px;background:var(--nav
   <div class="wrap">
     <div class="person">
       <div class="portrait reveal">
-        <!-- TODO Ute: Dieses Monogramm durch ein echtes Foto ersetzen.
-             <img src="dein-foto.jpg" alt="Ute Müller" style="width:100%;height:100%;object-fit:cover"> -->
-        <i class="logo-mark" style="width:200px;height:119px"></i>
+        <img src="ute-mueller.jpg" alt="Ute Müller, KI-Automatisierung" class="portrait-img">
       </div>
       <div class="reveal">
         <div class="eyebrow">Wer dahintersteht</div>
@@ -495,6 +494,41 @@ document.querySelectorAll('.reveal').forEach((el,i)=>{
   io.observe(el);
 });
 const _t=document.querySelector('.nav-toggle');const _n=document.querySelector('header.nav');if(_t){_t.addEventListener('click',()=>_n.classList.toggle('open'));_n.querySelectorAll('.nav-links a').forEach(a=>a.addEventListener('click',()=>_n.classList.remove('open')));}
+</script>
+
+<!-- n8n Chat-Widget -->
+<link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet">
+<style>
+:root{
+  --chat--color-primary:#a9772b;
+  --chat--color-primary-shade-50:#96691f;
+  --chat--color-primary-shade-100:#835b1b;
+  --chat--color-secondary:#bb5f37;
+  --chat--toggle--background:#a9772b;
+  --chat--toggle--hover--background:#96691f;
+  --chat--header--background:#2c2417;
+  --chat--message--user--background:#a9772b;
+}
+</style>
+<script type="module">
+  import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+  createChat({
+    webhookUrl: 'https://mmteam2025.app.n8n.cloud/webhook/cb5bb668-0f0d-42ab-bba5-b2f27bab8fe0/chat',
+    initialMessages: [
+      'Hallo! Ich bin der KI-Assistent von ki-mueller.',
+      'Frag mich, was eine KI-Automatisierung für deinen Betrieb bringen kann – oder probier einfach aus, wie sich so ein Agent anfühlt.'
+    ],
+    i18n: {
+      en: {
+        title: 'ki-mueller – KI-Assistent',
+        subtitle: 'Stell deine Frage. Antwort in Sekunden.',
+        getStarted: 'Neue Unterhaltung',
+        inputPlaceholder: 'Frag mich etwas …',
+        footer: '',
+        closeButtonTooltip: 'Schließen'
+      }
+    }
+  });
 </script>
 </body>
 </html>
