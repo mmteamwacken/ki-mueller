@@ -603,6 +603,11 @@ const _t=document.querySelector('.nav-toggle');const _n=document.querySelector('
 </script>
 
 <!-- n8n Chat-Widget -->
+<!-- ============================================================= -->
+<!-- CONSENT-BANNER + CHATBOT (ersetzt den bisherigen Chatbot-Block) -->
+<!-- ============================================================= -->
+
+<!-- 1) Chatbot-CSS wird sofort geladen (rein kosmetisch, unkritisch) -->
 <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet">
 <style>
 :root{
@@ -615,26 +620,123 @@ const _t=document.querySelector('.nav-toggle');const _n=document.querySelector('
   --chat--header--background:#2c2417;
   --chat--message--user--background:#a9772b;
 }
+
+/* Consent-Banner */
+#consent-banner{
+  position:fixed;left:16px;right:16px;bottom:16px;z-index:9999;
+  max-width:560px;margin:0 auto;
+  background:#fffdf8;color:#2c2417;
+  border:1px solid #e3d7c2;border-radius:14px;
+  box-shadow:0 12px 40px -12px rgba(44,36,23,.35);
+  padding:22px 24px;font-family:'Inter',system-ui,sans-serif;
+  font-size:.92rem;line-height:1.55;
+}
+#consent-banner.hidden{display:none}
+#consent-banner h4{
+  font-family:'Exo 2',sans-serif;font-weight:700;font-size:1.05rem;margin:0 0 8px
+}
+#consent-banner p{margin:0 0 16px;color:#6e6451}
+#consent-banner a{color:#a9772b;text-decoration:underline}
+#consent-actions{display:flex;gap:10px;flex-wrap:wrap}
+#consent-actions button{
+  font-family:'Exo 2',sans-serif;font-weight:700;font-size:.9rem;
+  border-radius:8px;padding:11px 18px;cursor:pointer;border:none;
+  transition:transform .15s ease;
+}
+#consent-actions button:hover{transform:translateY(-1px)}
+.consent-accept{background:#a9772b;color:#241b0d}
+.consent-decline{background:transparent;color:#2c2417;border:1px solid #e3d7c2 !important}
+@media(max-width:520px){
+  #consent-actions button{flex:1}
+}
 </style>
-<script type="module">
-  import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
-  createChat({
-    webhookUrl: 'https://mmteam2025.app.n8n.cloud/webhook/cb5bb668-0f0d-42ab-bba5-b2f27bab8fe0/chat',
-    initialMessages: [
-      'Hallo! Ich bin der KI-Assistent von ki-mueller.',
-      'Frag mich, was eine KI-Automatisierung für deinen Betrieb bringen kann – oder probier einfach aus, wie sich so ein Agent anfühlt.'
-    ],
-    i18n: {
-      en: {
-        title: 'ki-mueller – KI-Assistent',
-        subtitle: 'Stell deine Frage. Antwort in Sekunden.',
-        getStarted: 'Neue Unterhaltung',
-        inputPlaceholder: 'Frag mich etwas …',
-        footer: '',
-        closeButtonTooltip: 'Schließen'
-      }
-    }
-  });
+
+<!-- 2) Der Consent-Banner -->
+<div id="consent-banner" class="hidden" role="dialog" aria-live="polite" aria-label="Hinweis zum Chat-Assistenten">
+  <h4>Chat-Assistent aktivieren?</h4>
+  <p>
+    Unser KI-Chat-Assistent speichert für den Gesprächsverlauf eine Kennung
+    in deinem Browser (localStorage) und lädt Programmcode über ein CDN.
+    Das geschieht nur mit deiner Zustimmung. Die Website funktioniert auch ohne.
+    Mehr dazu in der <a href="/datenschutz">Datenschutzerklärung</a>.
+  </p>
+  <div id="consent-actions">
+    <button class="consent-accept" onclick="acceptChatConsent()">Assistent aktivieren</button>
+    <button class="consent-decline" onclick="declineChatConsent()">Nur notwendige</button>
+  </div>
+</div>
+
+<!-- 3) Steuerung: Chatbot lädt NUR nach Zustimmung -->
+<script>
+(function(){
+  var KEY = 'ki-mueller-chat-consent';
+
+  function loadChatbot(){
+    // n8n-Chat als Modul dynamisch nachladen
+    var s = document.createElement('script');
+    s.type = 'module';
+    s.textContent = `
+      import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+      createChat({
+        webhookUrl: 'https://mmteam2025.app.n8n.cloud/webhook/cb5bb668-0f0d-42ab-bba5-b2f27bab8fe0/chat',
+        initialMessages: [
+          '🤖 Hinweis: Sie schreiben mit einem KI-Assistenten, nicht mit einer echten Person.',
+          'Hallo! Ich bin der KI-Assistent von ki-mueller. Frag mich, was eine KI-Automatisierung für deinen Betrieb bringen kann – oder probier einfach aus, wie sich so ein Agent anfühlt.'
+        ],
+        i18n: {
+          en: {
+            title: 'ki-mueller – KI-Assistent',
+            subtitle: '🤖 KI-Chat (kein Mensch). Antwort in Sekunden.',
+            getStarted: 'Neue Unterhaltung',
+            inputPlaceholder: 'Frag mich etwas …',
+            footer: 'Automatisierte Antworten durch KI. Für verbindliche Auskünfte: info@ki-mueller.de',
+            closeButtonTooltip: 'Schließen'
+          }
+        }
+      });
+    `;
+    document.body.appendChild(s);
+  }
+
+  window.acceptChatConsent = function(){
+    try{ localStorage.setItem(KEY, 'granted'); }catch(e){}
+    hideBanner();
+    loadChatbot();
+  };
+
+  window.declineChatConsent = function(){
+    try{ localStorage.setItem(KEY, 'denied'); }catch(e){}
+    hideBanner();
+  };
+
+  function hideBanner(){
+    var b = document.getElementById('consent-banner');
+    if(b) b.classList.add('hidden');
+  }
+
+  function showBanner(){
+    var b = document.getElementById('consent-banner');
+    if(b) b.classList.remove('hidden');
+  }
+
+  // Beim Laden: Entscheidung prüfen
+  var choice = null;
+  try{ choice = localStorage.getItem(KEY); }catch(e){}
+
+  if(choice === 'granted'){
+    loadChatbot();            // schon zugestimmt -> direkt laden
+  } else if(choice === 'denied'){
+    /* nichts tun */          // schon abgelehnt -> nichts laden, kein Banner
+  } else {
+    showBanner();             // noch keine Entscheidung -> Banner zeigen
+  }
+
+  // Optional: Erneut entscheiden können (Link in Datenschutz/Footer)
+  window.resetChatConsent = function(){
+    try{ localStorage.removeItem(KEY); }catch(e){}
+    location.reload();
+  };
+})();
 </script>
 </body>
 </html>
