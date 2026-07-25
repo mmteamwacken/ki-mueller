@@ -44,4 +44,8 @@
   <changefreq>monthly</changefreq>
   <priority>0.8</priority>
 </url>
+  <loc>https://www.ki-mueller.de/ki-workshops-coaching>
+  <changefreq>monthly</changefreq>
+  <priority>0.8</priority>
+</url>
 </urlset>
