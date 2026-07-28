@@ -9,6 +9,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KI-Automatisierung für Immobilienmakler | ki-mueller.de</title>
+<script>document.documentElement.classList.add('js');</script>
 <link rel="canonical" href="https://www.ki-mueller.de/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ki-mueller.de">
@@ -271,7 +272,8 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px;background:var(--nav
 .foot-bottom a:hover{color:var(--text)}
 
 /* ---------- REVEAL ---------- */
-.reveal{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
+.reveal{opacity:1;transform:none;transition:opacity .6s ease,transform .6s ease}
+.js .reveal:not(.in){opacity:0;transform:translateY(24px)}
 .hero .reveal{opacity:1;transform:none;transition:none}
 
 /* ---------- RESPONSIVE ---------- */
