@@ -217,6 +217,15 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px;background:var(--nav
 .foot-bottom a:hover{color:var(--text)}
 
 /* RESPONSIVE */
+/* Navigation: Burger-Menue bereits ab 1080px, damit die Nav nicht umbricht */
+@media(max-width:1080px){
+  .nav-toggle{display:flex;flex-direction:column;justify-content:center;gap:5px;background:none;border:none;cursor:pointer;padding:8px;margin:-8px}
+  .nav-toggle span{width:24px;height:2px;background:var(--text);display:block}
+  .nav-links{display:none;position:absolute;top:68px;left:0;right:0;background:var(--navy-2);border-bottom:1px solid var(--line);flex-direction:column;gap:0;padding:10px 24px 18px;box-shadow:0 12px 24px -16px rgba(70,52,22,.4)}
+  header.nav.open .nav-links{display:flex}
+  .nav-links a{padding:13px 0}
+  .nav-links a.btn{margin-top:10px;text-align:center;padding:13px}
+}
 @media(max-width:880px){
   .nav-toggle{display:flex;flex-direction:column;justify-content:center;gap:5px;background:none;border:none;cursor:pointer;padding:8px;margin:-8px}
   .nav-toggle span{width:24px;height:2px;background:var(--text);display:block}
@@ -239,7 +248,8 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px;background:var(--nav
       <a href="/#ablauf">Ablauf</a>
       <a href="/#ueber-mich">Über mich</a>
       <a href="/#faq">FAQ</a>
-      <a href="/ki-workshops-coachings">Workshops &amp; Coachings</a>
+      <a href="/prozessautomatisierung">Prozessautomatisierung</a>
+      <a href="/ki-workshops-coachings">Workshops</a>
       <a href="/blog">Blog</a>
       <a href="/#kontakt" class="btn">Analysegespräch</a>
     </nav>
@@ -409,7 +419,7 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px;background:var(--nav
         <h4>Leistungen</h4>
         <a href="/#leistungen">KI-Telefonagent</a>
         <a href="/#leistungen">Website-Chatbot</a>
-        <a href="/#leistungen">Prozessautomatisierung</a>
+        <a href="/prozessautomatisierung">Prozessautomatisierung</a>
         <a href="/#leistungen">Lead-Generierung</a>
       </div>
       <div class="foot-col">
