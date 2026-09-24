@@ -693,6 +693,371 @@ footer{border-top:1px solid var(--line);padding:54px 0 40px;background:var(--nav
 })();
 </script>
 
+ 
+Live ablaeufe snippet · HTML
+<!-- ============================================================
+     ki-mueller.de · Sektion "Live-Abläufe"
+     Einfügen: kompletten Block in index.html einfügen, z.B. direkt
+     nach der Sektion #anwendungsfaelle. Keine externen Abhängigkeiten.
+     Nutzt die vorhandenen CSS-Variablen der Seite (mit Fallbacks).
+     ============================================================ -->
+<style>
+#live-ablaeufe{--lp-gold:var(--teal,#a9772b);--lp-gold-d:var(--teal-dim,#8b6020);--lp-rust:var(--blue,#bb5f37);--lp-text:var(--text,#2c2417);--lp-muted:var(--muted,#6e6451);--lp-muted2:var(--muted-2,#998e78);--lp-line:var(--line,#e3d7c2);--lp-surf:var(--surface,#fffdf8);--lp-surf2:var(--surface-2,#fbf5ea);--lp-bg2:var(--navy-2,#ede4d2);--lp-ok:#4f7a3a}
+#live-ablaeufe *{box-sizing:border-box}
+#live-ablaeufe .lp-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:28px 0 22px}
+#live-ablaeufe .lp-tab{font:600 14px/1.2 Inter,system-ui,sans-serif;color:var(--lp-muted);background:var(--lp-surf);border:1px solid var(--lp-line);border-radius:999px;padding:10px 16px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:.2s}
+#live-ablaeufe .lp-tab:hover{color:var(--lp-text);border-color:var(--lp-gold)}
+#live-ablaeufe .lp-tab[aria-selected="true"]{background:var(--lp-text);color:#fffaf0;border-color:var(--lp-text)}
+#live-ablaeufe .lp-tab .lp-n{font-size:11px;opacity:.6}
+#live-ablaeufe .lp-panel{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:40px;align-items:start}
+#live-ablaeufe .lp-panel[hidden]{display:none}
+/* Fenster */
+#live-ablaeufe .lp-win{background:var(--lp-surf);border:1px solid var(--lp-line);border-radius:16px;box-shadow:0 20px 50px -25px rgba(44,36,23,.35);overflow:hidden}
+#live-ablaeufe .lp-bar{display:flex;align-items:center;gap:10px;padding:10px 14px;background:var(--lp-surf2);border-bottom:1px solid var(--lp-line);font:500 12px Inter,sans-serif;color:var(--lp-muted)}
+#live-ablaeufe .lp-dots{display:flex;gap:5px}#live-ablaeufe .lp-dots i{width:9px;height:9px;border-radius:50%;background:var(--lp-line)}
+#live-ablaeufe .lp-live{margin-left:auto;display:flex;align-items:center;gap:6px;font-weight:700;font-size:10px;letter-spacing:.08em;color:var(--lp-rust)}
+#live-ablaeufe .lp-live::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--lp-rust);animation:lpPulse 1.4s infinite}
+#live-ablaeufe .lp-steps{display:flex;gap:6px;padding:12px 14px;border-bottom:1px solid var(--lp-line)}
+#live-ablaeufe .lp-step{flex:1;display:flex;align-items:center;gap:7px;font:600 11.5px Inter,sans-serif;color:var(--lp-muted2);padding:6px 8px;border-radius:8px;transition:.3s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#live-ablaeufe .lp-step b{flex:none;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;font-size:10px;border:1px solid var(--lp-line);background:var(--lp-surf)}
+#live-ablaeufe .lp-step.on{color:var(--lp-text);background:var(--lp-bg2)}
+#live-ablaeufe .lp-step.on b{background:var(--lp-gold);border-color:var(--lp-gold);color:#fff}
+#live-ablaeufe .lp-step.done b{background:var(--lp-text);border-color:var(--lp-text);color:#fff}
+#live-ablaeufe .lp-stage{height:340px;padding:18px;position:relative;overflow:hidden;background:linear-gradient(180deg,var(--lp-surf),var(--lp-surf2))}
+#live-ablaeufe .lp-cap{font:400 13px/1.5 Inter,sans-serif;color:var(--lp-muted);text-align:center;margin:16px 0 0}
+/* gemeinsame Bausteine */
+#live-ablaeufe .lp-fade{opacity:0;transform:translateY(8px);transition:opacity .45s,transform .45s}
+#live-ablaeufe .lp-fade.in{opacity:1;transform:none}
+#live-ablaeufe .lp-msg{max-width:84%;padding:9px 12px;border-radius:12px;font:400 13px/1.45 Inter,sans-serif;margin-bottom:8px;color:var(--lp-text)}
+#live-ablaeufe .lp-msg.bot{background:var(--lp-bg2);border-bottom-left-radius:4px}
+#live-ablaeufe .lp-msg.usr{background:var(--lp-gold);color:#fff;margin-left:auto;border-bottom-right-radius:4px}
+#live-ablaeufe .lp-who{display:block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;opacity:.65;margin-bottom:2px}
+#live-ablaeufe .lp-ai{display:inline-block;font:700 9.5px Inter,sans-serif;letter-spacing:.05em;padding:2px 6px;border-radius:4px;background:var(--lp-text);color:#fffaf0;vertical-align:middle}
+#live-ablaeufe .lp-card{background:var(--lp-surf);border:1px solid var(--lp-line);border-radius:12px;padding:12px 14px;font:400 12.5px/1.5 Inter,sans-serif;color:var(--lp-text)}
+#live-ablaeufe .lp-card h5{margin:0 0 8px;font:700 11px Inter,sans-serif;letter-spacing:.07em;text-transform:uppercase;color:var(--lp-gold-d)}
+#live-ablaeufe .lp-row{display:flex;justify-content:space-between;gap:10px;padding:4px 0;border-bottom:1px dashed var(--lp-line)}
+#live-ablaeufe .lp-row:last-child{border:0}
+#live-ablaeufe .lp-row span:first-child{color:var(--lp-muted)}
+#live-ablaeufe .lp-row span:last-child{font-weight:600;text-align:right}
+#live-ablaeufe .lp-ok{display:inline-flex;align-items:center;gap:6px;font:600 12px Inter,sans-serif;color:var(--lp-ok);background:#eef4e8;border:1px solid #cfe0c2;border-radius:999px;padding:5px 10px}
+#live-ablaeufe .lp-ok::before{content:"✓"}
+#live-ablaeufe .lp-typing{display:inline-flex;gap:3px;padding:10px 12px;background:var(--lp-bg2);border-radius:12px;margin-bottom:8px}
+#live-ablaeufe .lp-typing i{width:6px;height:6px;border-radius:50%;background:var(--lp-muted2);animation:lpDot 1s infinite}
+#live-ablaeufe .lp-typing i:nth-child(2){animation-delay:.15s}#live-ablaeufe .lp-typing i:nth-child(3){animation-delay:.3s}
+/* Telefon */
+#live-ablaeufe .lp-call{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+#live-ablaeufe .lp-avatar{width:40px;height:40px;border-radius:50%;background:var(--lp-text);color:#fffaf0;display:grid;place-items:center;font:700 13px Inter,sans-serif;position:relative}
+#live-ablaeufe .lp-ring .lp-avatar::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:2px solid var(--lp-gold);animation:lpRing 1.2s infinite}
+#live-ablaeufe .lp-call strong{display:block;font:700 13.5px Inter,sans-serif;color:var(--lp-text)}
+#live-ablaeufe .lp-call small{font:400 12px Inter,sans-serif;color:var(--lp-muted)}
+#live-ablaeufe .lp-wave{margin-left:auto;display:flex;align-items:center;gap:2px;height:24px}
+#live-ablaeufe .lp-wave i{width:3px;border-radius:2px;background:var(--lp-gold);height:4px;transition:height .15s}
+/* Leads */
+#live-ablaeufe .lp-lead{display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px;padding:9px 12px;border:1px solid var(--lp-line);border-radius:10px;background:var(--lp-surf);margin-bottom:7px;font:400 12.5px Inter,sans-serif;color:var(--lp-text);transition:transform .5s,opacity .4s,border-color .3s}
+#live-ablaeufe .lp-lead small{display:block;color:var(--lp-muted);font-size:11.5px}
+#live-ablaeufe .lp-score{font:700 12px Inter,sans-serif;min-width:52px;text-align:center;padding:4px 8px;border-radius:6px;background:var(--lp-bg2);color:var(--lp-muted)}
+#live-ablaeufe .lp-score.a{background:var(--lp-gold);color:#fff}
+#live-ablaeufe .lp-score.b{background:#e9d9b8;color:var(--lp-gold-d)}
+#live-ablaeufe .lp-meter{height:4px;border-radius:2px;background:var(--lp-bg2);margin-top:6px;overflow:hidden}
+#live-ablaeufe .lp-meter i{display:block;height:100%;width:0;background:var(--lp-gold);transition:width 1s}
+/* n8n-Flow */
+#live-ablaeufe .lp-flow{position:relative;height:150px}
+#live-ablaeufe .lp-flow svg{position:absolute;inset:0;width:100%;height:100%}
+#live-ablaeufe .lp-flow path{fill:none;stroke:var(--lp-line);stroke-width:2}
+#live-ablaeufe .lp-flow path.hot{stroke:var(--lp-gold);stroke-dasharray:6 6;animation:lpDash .6s linear infinite}
+#live-ablaeufe .lp-node{position:absolute;width:22%;min-height:62px;background:var(--lp-surf);border:1.5px solid var(--lp-line);border-radius:10px;padding:8px;font:600 11px/1.3 Inter,sans-serif;color:var(--lp-text);text-align:center;transition:.3s;transform:translateY(-50%);top:50%}
+#live-ablaeufe .lp-node em{display:block;font-style:normal;font-size:18px;margin-bottom:2px}
+#live-ablaeufe .lp-node.on{border-color:var(--lp-gold);box-shadow:0 0 0 4px rgba(169,119,43,.15)}
+#live-ablaeufe .lp-node.done{border-color:var(--lp-ok)}
+/* Text rechts */
+#live-ablaeufe .lp-note{font:500 12.5px/1.5 Inter,sans-serif;color:var(--lp-muted);background:var(--lp-surf);border:1px solid var(--lp-line);border-left:3px solid var(--lp-gold);border-radius:8px;padding:10px 12px;margin-bottom:20px}
+#live-ablaeufe .lp-panel h3{font-family:"Exo 2",sans-serif;font-size:24px;line-height:1.2;margin:0 0 10px;color:var(--lp-text)}
+#live-ablaeufe .lp-label{font:700 11px Inter,sans-serif;letter-spacing:.1em;text-transform:uppercase;color:var(--lp-gold-d);margin:18px 0 6px}
+#live-ablaeufe .lp-panel p{font:400 15px/1.6 Inter,sans-serif;color:var(--lp-muted);margin:0}
+#live-ablaeufe ol.lp-list{list-style:none;margin:8px 0 0;padding:0}
+#live-ablaeufe ol.lp-list li{display:grid;grid-template-columns:26px 1fr;gap:10px;padding:10px;border-radius:10px;transition:.3s;font:400 14px/1.5 Inter,sans-serif;color:var(--lp-muted)}
+#live-ablaeufe ol.lp-list li b{display:block;color:var(--lp-text);font-weight:600}
+#live-ablaeufe ol.lp-list li span.k{width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font:700 11px Inter,sans-serif;border:1px solid var(--lp-line);background:var(--lp-surf);color:var(--lp-muted)}
+#live-ablaeufe ol.lp-list li.on{background:var(--lp-surf)}
+#live-ablaeufe ol.lp-list li.on span.k{background:var(--lp-gold);border-color:var(--lp-gold);color:#fff}
+#live-ablaeufe .lp-gets{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+#live-ablaeufe .lp-gets span{font:500 12.5px Inter,sans-serif;color:var(--lp-text);background:var(--lp-bg2);border-radius:999px;padding:5px 11px}
+#live-ablaeufe .lp-ctrl{display:flex;gap:8px;justify-content:center;margin-top:10px}
+#live-ablaeufe .lp-ctrl button{font:600 12px Inter,sans-serif;color:var(--lp-muted);background:none;border:1px solid var(--lp-line);border-radius:999px;padding:6px 12px;cursor:pointer}
+#live-ablaeufe .lp-ctrl button:hover{color:var(--lp-text);border-color:var(--lp-gold)}
+@keyframes lpPulse{50%{opacity:.3}}
+@keyframes lpDot{50%{transform:translateY(-3px);opacity:.5}}
+@keyframes lpRing{0%{transform:scale(.9);opacity:1}100%{transform:scale(1.35);opacity:0}}
+@keyframes lpDash{to{stroke-dashoffset:-12}}
+@media (max-width:900px){#live-ablaeufe .lp-panel{grid-template-columns:1fr;gap:24px}}
+@media (max-width:520px){#live-ablaeufe .lp-stage{height:380px;padding:14px}#live-ablaeufe .lp-step span{display:none}#live-ablaeufe .lp-step.on span{display:inline}#live-ablaeufe .lp-step.on{flex:2.5}#live-ablaeufe .lp-step{justify-content:center}#live-ablaeufe .lp-tab{font-size:13px;padding:9px 13px}#live-ablaeufe .lp-node{width:23%;font-size:10px;padding:6px 4px}}
+@media (prefers-reduced-motion:reduce){#live-ablaeufe *{animation:none!important;transition:none!important}}
+</style>
+ 
+<section class="section" id="live-ablaeufe">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="eyebrow">Live-Abläufe</div>
+      <h2>So arbeitet die KI in deinem Maklerbüro</h2>
+      <p class="intro">Vier typische Abläufe, Schritt für Schritt durchgespielt. Klick auf einen Reiter und schau zu, was im Hintergrund passiert.</p>
+    </div>
+ 
+    <div class="lp-tabs" role="tablist" aria-label="Live-Abläufe">
+      <button class="lp-tab" role="tab" aria-selected="true" aria-controls="lp-p0" id="lp-t0"><span class="lp-n">01</span>KI-Telefonagent</button>
+      <button class="lp-tab" role="tab" aria-selected="false" aria-controls="lp-p1" id="lp-t1"><span class="lp-n">02</span>Website-Chatbot</button>
+      <button class="lp-tab" role="tab" aria-selected="false" aria-controls="lp-p2" id="lp-t2"><span class="lp-n">03</span>Lead-Qualifizierung</button>
+      <button class="lp-tab" role="tab" aria-selected="false" aria-controls="lp-p3" id="lp-t3"><span class="lp-n">04</span>Prozessautomatisierung</button>
+    </div>
+ 
+    <!-- 01 Telefonagent -->
+    <div class="lp-panel" role="tabpanel" id="lp-p0" aria-labelledby="lp-t0" data-demo="phone">
+      <div>
+        <div class="lp-win">
+          <div class="lp-bar"><span class="lp-dots"><i></i><i></i><i></i></span>Telefonagent · Anrufprotokoll<span class="lp-live">LIVE</span></div>
+          <div class="lp-steps"><div class="lp-step"><b>1</b><span>Anruf annehmen</span></div><div class="lp-step"><b>2</b><span>Gespräch führen</span></div><div class="lp-step"><b>3</b><span>Termin &amp; Übergabe</span></div></div>
+          <div class="lp-stage" data-stage></div>
+        </div>
+        <p class="lp-cap">Ein Interessent ruft abends an. Der Agent nimmt ab, beantwortet Objektfragen und bucht die Besichtigung.</p>
+        <div class="lp-ctrl"><button data-replay>↻ Nochmal abspielen</button></div>
+      </div>
+      <div>
+        <div class="lp-note">Beispielablauf zur Veranschaulichung. Namen, Objekt und Gesprächsinhalt sind frei erfunden.</div>
+        <h3>Kein Anruf landet mehr auf der Mailbox</h3>
+        <div class="lp-label">Ausgangslage</div>
+        <p>Du bist in der Besichtigung oder hast Feierabend, das Telefon klingelt. Wer niemanden erreicht, ruft den nächsten Makler an.</p>
+        <div class="lp-label">So läuft es ab</div>
+        <ol class="lp-list">
+          <li><span class="k">1</span><div><b>Anruf annehmen</b>Der Agent geht sofort ran und sagt klar, dass hier ein KI-Assistent spricht.</div></li>
+          <li><span class="k">2</span><div><b>Gespräch führen</b>Er beantwortet Fragen aus deinen Objektdaten und fragt Suchprofil und Finanzierung ab.</div></li>
+          <li><span class="k">3</span><div><b>Termin &amp; Übergabe</b>Die Besichtigung landet in deinem Kalender, die Zusammenfassung in deinem Postfach.</div></li>
+        </ol>
+        <div class="lp-label">Was du bekommst</div>
+        <div class="lp-gets"><span>Erreichbarkeit rund um die Uhr</span><span>Gesprächszusammenfassung</span><span>Termin im Kalender</span></div>
+      </div>
+    </div>
+ 
+    <!-- 02 Chatbot -->
+    <div class="lp-panel" role="tabpanel" id="lp-p1" aria-labelledby="lp-t1" data-demo="chat" hidden>
+      <div>
+        <div class="lp-win">
+          <div class="lp-bar"><span class="lp-dots"><i></i><i></i><i></i></span>deine-website.de · Chat<span class="lp-live">LIVE</span></div>
+          <div class="lp-steps"><div class="lp-step"><b>1</b><span>Begrüßen</span></div><div class="lp-step"><b>2</b><span>Qualifizieren</span></div><div class="lp-step"><b>3</b><span>Lead übergeben</span></div></div>
+          <div class="lp-stage" data-stage></div>
+        </div>
+        <p class="lp-cap">Ein Besucher auf deiner Website fragt nach Wohnungen. Der Chatbot klärt die Eckdaten und legt den Lead an.</p>
+        <div class="lp-ctrl"><button data-replay>↻ Nochmal abspielen</button></div>
+      </div>
+      <div>
+        <div class="lp-note">Beispielablauf zur Veranschaulichung. Namen und Angaben sind frei erfunden.</div>
+        <h3>Aus einem Website-Besuch wird ein qualifizierter Kontakt</h3>
+        <div class="lp-label">Ausgangslage</div>
+        <p>Besucher schauen sich deine Objekte an und gehen wieder. Das Kontaktformular füllt kaum jemand aus, und wenn doch, fehlen die wichtigsten Angaben.</p>
+        <div class="lp-label">So läuft es ab</div>
+        <ol class="lp-list">
+          <li><span class="k">1</span><div><b>Begrüßen</b>Der Chatbot meldet sich, gekennzeichnet als KI, und fragt nach dem Anliegen.</div></li>
+          <li><span class="k">2</span><div><b>Qualifizieren</b>Budget, Suchgebiet, Zeitrahmen und Finanzierungsstand werden im Gespräch abgefragt.</div></li>
+          <li><span class="k">3</span><div><b>Lead übergeben</b>Nach Datenschutz-Hinweis und Einwilligung gehen die Kontaktdaten mit allen Angaben an dich.</div></li>
+        </ol>
+        <div class="lp-label">Was du bekommst</div>
+        <div class="lp-gets"><span>Vollständige Anfragen</span><span>Antworten auch nachts</span><span>Weniger Rückfragen</span></div>
+      </div>
+    </div>
+ 
+    <!-- 03 Lead-Qualifizierung -->
+    <div class="lp-panel" role="tabpanel" id="lp-p2" aria-labelledby="lp-t2" data-demo="leads" hidden>
+      <div>
+        <div class="lp-win">
+          <div class="lp-bar"><span class="lp-dots"><i></i><i></i><i></i></span>Anfragen-Eingang · heute<span class="lp-live">LIVE</span></div>
+          <div class="lp-steps"><div class="lp-step"><b>1</b><span>Anfragen sammeln</span></div><div class="lp-step"><b>2</b><span>Bewerten</span></div><div class="lp-step"><b>3</b><span>Sortieren &amp; nachfassen</span></div></div>
+          <div class="lp-stage" data-stage></div>
+        </div>
+        <p class="lp-cap">Portal-Anfragen kommen rein, werden nach deinen Kriterien bewertet und sortiert.</p>
+        <div class="lp-ctrl"><button data-replay>↻ Nochmal abspielen</button></div>
+      </div>
+      <div>
+        <div class="lp-note">Beispielablauf zur Veranschaulichung. Namen und Angaben sind frei erfunden. Die Bewertungskriterien legst du selbst fest.</div>
+        <h3>Du rufst zuerst die an, die wirklich kaufen können</h3>
+        <div class="lp-label">Ausgangslage</div>
+        <p>Auf ein gutes Objekt kommen dutzende Anfragen. Wer ernsthaft sucht und finanzieren kann, geht in der Masse unter.</p>
+        <div class="lp-label">So läuft es ab</div>
+        <ol class="lp-list">
+          <li><span class="k">1</span><div><b>Anfragen sammeln</b>Anfragen aus Portalen, Website und E-Mail laufen an einer Stelle zusammen.</div></li>
+          <li><span class="k">2</span><div><b>Bewerten</b>Die KI gleicht jede Anfrage mit deinen Kriterien ab, etwa Budget, Finanzierung und Zeitrahmen.</div></li>
+          <li><span class="k">3</span><div><b>Sortieren &amp; nachfassen</b>Top-Kontakte stehen oben, bei unvollständigen Anfragen geht automatisch eine Rückfrage raus.</div></li>
+        </ol>
+        <div class="lp-label">Was du bekommst</div>
+        <div class="lp-gets"><span>Priorisierte Liste</span><span>Automatische Rückfragen</span><span>Übertrag ins CRM</span></div>
+      </div>
+    </div>
+ 
+    <!-- 04 Prozessautomatisierung -->
+    <div class="lp-panel" role="tabpanel" id="lp-p3" aria-labelledby="lp-t3" data-demo="flow" hidden>
+      <div>
+        <div class="lp-win">
+          <div class="lp-bar"><span class="lp-dots"><i></i><i></i><i></i></span>Workflow · Exposé-Anfrage<span class="lp-live">LIVE</span></div>
+          <div class="lp-steps"><div class="lp-step"><b>1</b><span>Auslöser</span></div><div class="lp-step"><b>2</b><span>Daten verarbeiten</span></div><div class="lp-step"><b>3</b><span>Aktionen</span></div></div>
+          <div class="lp-stage" data-stage></div>
+        </div>
+        <p class="lp-cap">Eine Exposé-Anfrage per E-Mail löst den Workflow aus. Alles Weitere läuft ohne Handarbeit.</p>
+        <div class="lp-ctrl"><button data-replay>↻ Nochmal abspielen</button></div>
+      </div>
+      <div>
+        <div class="lp-note">Beispielablauf zur Veranschaulichung. Der konkrete Workflow wird an deine Tools angepasst.</div>
+        <h3>Wiederkehrende Handgriffe laufen im Hintergrund</h3>
+        <div class="lp-label">Ausgangslage</div>
+        <p>Exposé verschicken, Kontakt ins CRM übertragen, nach ein paar Tagen nachfassen. Jeder Schritt ist klein, zusammen fressen sie Stunden pro Woche.</p>
+        <div class="lp-label">So läuft es ab</div>
+        <ol class="lp-list">
+          <li><span class="k">1</span><div><b>Auslöser</b>Eine neue Anfrage kommt per E-Mail, Portal oder Formular rein.</div></li>
+          <li><span class="k">2</span><div><b>Daten verarbeiten</b>Die KI liest Name, Kontakt, Objekt und Anliegen aus und prüft auf Dubletten.</div></li>
+          <li><span class="k">3</span><div><b>Aktionen</b>Kontakt wird im CRM angelegt, das Exposé verschickt und eine Nachfass-Erinnerung gesetzt.</div></li>
+        </ol>
+        <div class="lp-label">Was du bekommst</div>
+        <div class="lp-gets"><span>Keine Abtipp-Arbeit</span><span>Einheitliche Abläufe</span><span>Nichts wird vergessen</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+ 
+<script>
+(function(){
+  var root=document.getElementById('live-ablaeufe'); if(!root) return;
+  var reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var tabs=[].slice.call(root.querySelectorAll('.lp-tab'));
+  var panels=[].slice.call(root.querySelectorAll('.lp-panel'));
+  var run=0, visible=false, active=0, started=false;
+ 
+  function el(tag,cls,html){var e=document.createElement(tag);if(cls)e.className=cls;if(html!=null)e.innerHTML=html;return e;}
+  function show(e){requestAnimationFrame(function(){requestAnimationFrame(function(){e.classList.add('in');});});return e;}
+  function wait(ms,id){return new Promise(function(res,rej){setTimeout(function(){id===run?res():rej('stop');},reduce?0:ms);});}
+  function setStep(p,i){
+    p.querySelectorAll('.lp-step').forEach(function(s,k){s.classList.toggle('on',k===i);s.classList.toggle('done',k<i);});
+    p.querySelectorAll('ol.lp-list li').forEach(function(s,k){s.classList.toggle('on',k===i);});
+  }
+  async function typing(box,id,ms){var t=box.appendChild(el('div','lp-typing','<i></i><i></i><i></i>'));await wait(ms||900,id);t.remove();}
+  function msg(box,cls,who,text){var m=el('div','lp-msg '+cls+' lp-fade',(who?'<span class="lp-who">'+who+'</span>':'')+text);box.appendChild(m);show(m);box.scrollTop=box.scrollHeight;return m;}
+  function card(title,rows){return el('div','lp-card lp-fade','<h5>'+title+'</h5>'+rows.map(function(r){return '<div class="lp-row"><span>'+r[0]+'</span><span>'+r[1]+'</span></div>';}).join(''));}
+ 
+  var demos={
+    phone: async function(p,s,id){
+      setStep(p,0);
+      var call=el('div','lp-call lp-ring','<div class="lp-avatar">SP</div><div><strong>Eingehender Anruf</strong><small>Do, 19:42 · Mobilnummer</small></div><div class="lp-wave">'+'<i></i>'.repeat(14)+'</div>');
+      s.appendChild(call);
+      var box=s.appendChild(el('div'));box.style.cssText='height:230px;overflow:hidden';
+      await wait(1600,id);
+      call.classList.remove('lp-ring');call.querySelector('strong').textContent='Verbunden · 00:04';
+      var bars=call.querySelectorAll('.lp-wave i'),wv=setInterval(function(){if(id!==run){clearInterval(wv);return;}bars.forEach(function(b){b.style.height=(4+Math.random()*18)+'px';});},160);
+      msg(box,'bot','KI-Assistent <span class="lp-ai">KI</span>','Guten Abend, hier spricht der digitale Assistent von Musterimmobilien. Wie kann ich helfen?');
+      await wait(2200,id); setStep(p,1);
+      msg(box,'usr','Anrufer','Ich rufe wegen der 3-Zimmer-Wohnung an. Gibt es einen Balkon?');
+      await wait(1400,id); await typing(box,id,800);
+      msg(box,'bot','KI-Assistent','Ja, Südbalkon mit rund 8 m². Suchen Sie für sich selbst, und ist die Finanzierung schon geklärt?');
+      await wait(2300,id);
+      msg(box,'usr','Anrufer','Für uns selbst, Finanzierungsbestätigung liegt vor.');
+      await wait(1500,id); await typing(box,id,800);
+      msg(box,'bot','KI-Assistent','Dann biete ich Ihnen Samstag, 10:30 Uhr zur Besichtigung an. Passt das?');
+      await wait(2400,id);
+      clearInterval(wv); bars.forEach(function(b){b.style.height='4px';});
+      call.querySelector('strong').textContent='Gespräch beendet · 02:18';
+      setStep(p,2); box.innerHTML='';
+      var c=card('Zusammenfassung an dich',[['Anrufer','S. Petersen'],['Objekt','3-Zi.-Whg., Südbalkon'],['Suchprofil','Eigennutzung'],['Finanzierung','Bestätigung liegt vor'],['Besichtigung','Sa, 10:30 Uhr']]);
+      box.appendChild(c);show(c);
+      await wait(1200,id);
+      var ok=el('div','lp-fade','<span class="lp-ok">Termin im Kalender eingetragen</span>');ok.style.marginTop='10px';box.appendChild(ok);show(ok);
+      await wait(4500,id);
+    },
+    chat: async function(p,s,id){
+      setStep(p,0);
+      var head=el('div','','<div style="display:flex;align-items:center;gap:8px;font:700 13px Inter,sans-serif;color:var(--lp-text);margin-bottom:10px"><span class="lp-avatar" style="width:28px;height:28px;font-size:11px">KI</span>Assistent von Musterimmobilien <span class="lp-ai">KI</span></div>');
+      s.appendChild(head);
+      var box=s.appendChild(el('div'));box.style.cssText='height:270px;overflow:hidden';
+      await wait(600,id);
+      msg(box,'bot','','Hallo! Ich bin ein KI-Assistent. Suchen Sie eine Immobilie oder möchten Sie verkaufen?');
+      await wait(1800,id);
+      msg(box,'usr','','Ich suche eine Wohnung in Itzehoe.');
+      await wait(900,id); setStep(p,1); await typing(box,id,800);
+      msg(box,'bot','','Gern. Welches Budget haben Sie ungefähr eingeplant?');
+      await wait(1200,id);
+      var q=el('div','lp-fade','');q.style.cssText='display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px';
+      ['bis 250.000 €','250–400.000 €','über 400.000 €'].forEach(function(t,i){var b=el('span','',t);b.style.cssText='font:600 12px Inter,sans-serif;padding:6px 10px;border-radius:999px;border:1px solid var(--lp-gold);color:var(--lp-gold-d);background:var(--lp-surf)';b.dataset.i=i;q.appendChild(b);});
+      box.appendChild(q);show(q);
+      await wait(1600,id);
+      var pick=q.children[1];pick.style.background='var(--lp-gold)';pick.style.color='#fff';
+      await wait(700,id); q.remove();
+      msg(box,'usr','','250–400.000 €');
+      await wait(900,id); await typing(box,id,800);
+      msg(box,'bot','','Ist die Finanzierung schon mit einer Bank besprochen?');
+      await wait(1600,id);
+      msg(box,'usr','','Ja, Vorabzusage liegt vor.');
+      await wait(1200,id); setStep(p,2); box.innerHTML='';
+      var c=card('Neuer Lead · an Makler übergeben',[['Anliegen','Kauf, Wohnung'],['Region','Itzehoe'],['Budget','250–400.000 €'],['Finanzierung','Vorabzusage'],['Einwilligung','erteilt']]);
+      box.appendChild(c);show(c);
+      await wait(1200,id);
+      var ok=el('div','lp-fade','<span class="lp-ok">Lead im Postfach &amp; CRM</span>');ok.style.marginTop='10px';box.appendChild(ok);show(ok);
+      await wait(4500,id);
+    },
+    leads: async function(p,s,id){
+      setStep(p,0);
+      var data=[['M. Jansen','Portal · Budget offen, keine Angaben',32,'c'],['K. Brandt','Website · Finanzierung bestätigt, Kauf in 3 Mon.',91,'a'],['T. Hoffmann','Portal · Budget passt, Finanzierung in Klärung',64,'b'],['L. Sommer','E-Mail · Kapitalanleger, Eigenkapital vorhanden',86,'a']];
+      var rows=data.map(function(d){var r=el('div','lp-lead lp-fade','<div><strong>'+d[0]+'</strong><small>'+d[1]+'</small><div class="lp-meter"><i></i></div></div><span class="lp-score">neu</span>');return r;});
+      for(var i=0;i<rows.length;i++){s.appendChild(rows[i]);show(rows[i]);await wait(700,id);}
+      await wait(600,id); setStep(p,1);
+      for(i=0;i<rows.length;i++){rows[i].style.borderColor='var(--lp-gold)';rows[i].querySelector('.lp-meter i').style.width=data[i][2]+'%';var sc=rows[i].querySelector('.lp-score');sc.textContent='prüft…';await wait(900,id);sc.textContent=data[i][2]+' / 100';sc.className='lp-score '+data[i][3];rows[i].style.borderColor='';}
+      await wait(900,id); setStep(p,2);
+      var order=data.map(function(d,i){return i;}).sort(function(a,b){return data[b][2]-data[a][2];});
+      var h=rows[0].offsetHeight+7, first=rows.map(function(r){return r.offsetTop;});
+      order.forEach(function(idx,pos){rows[idx].style.transform='translateY('+(pos*h-first[idx]+first[0])+'px)';});
+      await wait(1100,id);
+      var ok=el('div','lp-fade','<span class="lp-ok">2 Top-Leads ins CRM · 1 Rückfrage an M. Jansen verschickt</span>');ok.style.cssText='position:absolute;left:18px;right:18px;bottom:16px';s.appendChild(ok);show(ok);
+      await wait(5000,id);
+    },
+    flow: async function(p,s,id){
+      setStep(p,0);
+      var f=el('div','lp-flow');
+      f.innerHTML='<svg viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M22 50 L26 50"/><path d="M48 50 L52 50"/><path d="M74 50 L78 50"/></svg>';
+      var nodes=[['✉️','Neue E-Mail'],['🧠','KI liest Daten aus'],['🗂️','CRM-Eintrag'],['📄','Exposé + Erinnerung']].map(function(n,i){var d=el('div','lp-node','<em>'+n[0]+'</em>'+n[1]);d.style.left=(i*26)+'%';f.appendChild(d);return d;});
+      s.appendChild(f);
+      var paths=f.querySelectorAll('path');
+      var out=s.appendChild(el('div'));out.style.marginTop='6px';
+      await wait(700,id);
+      nodes[0].classList.add('on');
+      var mail=card('Eingang',[['Betreff','Anfrage Exposé Whg. 12'],['Von','a.krueger@…']]);out.appendChild(mail);show(mail);
+      await wait(1800,id); nodes[0].classList.replace('on','done'); paths[0].classList.add('hot');
+      setStep(p,1); await wait(600,id); nodes[1].classList.add('on'); out.innerHTML='';
+      var ex=card('Ausgelesen',[['Name','A. Krüger'],['Telefon','0151 …'],['Objekt','Whg. 12, 2 Zi.'],['Dublette','nein']]);out.appendChild(ex);show(ex);
+      await wait(2400,id); nodes[1].classList.replace('on','done'); paths[1].classList.add('hot');
+      setStep(p,2); await wait(600,id); nodes[2].classList.add('on');
+      await wait(1300,id); nodes[2].classList.replace('on','done'); paths[2].classList.add('hot');
+      await wait(500,id); nodes[3].classList.add('on'); out.innerHTML='';
+      var ok=el('div','lp-fade','<div style="display:flex;flex-direction:column;gap:8px;align-items:flex-start"><span class="lp-ok">Kontakt im CRM angelegt</span><span class="lp-ok">Exposé per E-Mail verschickt</span><span class="lp-ok">Nachfassen in 3 Tagen geplant</span></div>');out.appendChild(ok);show(ok);
+      await wait(1000,id); nodes[3].classList.replace('on','done');
+      await wait(4500,id);
+    }
+  };
+ 
+  async function start(i){
+    var id=++run, p=panels[i], s=p.querySelector('[data-stage]');
+    s.innerHTML='';
+    try{ await demos[p.dataset.demo](p,s,id); if(!reduce&&id===run&&visible) start(i); }catch(e){}
+  }
+  function select(i){
+    active=i;
+    tabs.forEach(function(t,k){t.setAttribute('aria-selected',k===i);t.tabIndex=k===i?0:-1;});
+    panels.forEach(function(p,k){p.hidden=k!==i;});
+    if(visible) start(i); else started=false;
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){select(i);});
+    t.addEventListener('keydown',function(e){var d=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:0;if(d){var n=(i+d+tabs.length)%tabs.length;tabs[n].focus();select(n);}});
+  });
+  root.querySelectorAll('[data-replay]').forEach(function(b){b.addEventListener('click',function(){start(active);});});
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(en){en.forEach(function(e){visible=e.isIntersecting;if(visible){start(active);}else{run++;}});},{threshold:.25}).observe(root);
+  } else { visible=true; start(0); }
+})();
+</script>
+ 
+ 
 
 <!-- ============================================================= -->
 <!-- 2) MAKLER-FOKUS-BLOCK (einfügen direkt nach dem Slider)        -->
